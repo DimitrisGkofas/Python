@@ -21,9 +21,21 @@ class table_class:
     def gpu_to_cpu(self, queue):
         cl.enqueue_copy(queue, self.np_array, self.cl_buffer).wait()
 
+def find_globals(kernel_str):
+    kernel_str = kernel_str[1:]
+    kernel_args = kernel_str.split(')')
+    args_list = kernel_args[0].split(',')
+    
+    for i in range(len(args_list)):
+        if '*' in args_list[i]:
+            args_list[i] = '__global ' + args_list[i].strip()
+
+    kernel_args[0] = ','.join(args_list)
+    return  ')'.join(kernel_args)
+
 class program_class:
     def __init__(self, context, kernel_str, global_size, local_size = None):
-        kernel_str = "__kernel void func" + re.sub(r'\(([^)]*\*\s*\w+[^)]*)\)', r'(__global \1)', kernel_str) # generaly a kernels can have multiple functions like the void func but for simpl. it cannot!
+        kernel_str = "__kernel void func(" + find_globals(kernel_str)
         self.program = cl.Program(context, kernel_str).build()
         self.global_size = global_size
         self.local_size = local_size
