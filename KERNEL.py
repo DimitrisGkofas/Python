@@ -8,9 +8,9 @@ class table_class:
         self.cl_buffer = None
         if inp:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
-        elif outp:
+        if outp:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.WRITE_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
-        else:
+        if inp and outp:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
 
     def cpu_to_gpu(self, queue):
