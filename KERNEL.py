@@ -6,9 +6,9 @@ class table_class:
     def __init__(self, context, table_shape, table_dtype, inp = True, outp = True):
         self.np_array = np.zeros(shape=(table_shape), dtype = table_dtype)
         self.cl_buffer = None
-        if inp:
+        if inp and (not outp):
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
-        if outp:
+        if outp and (not inp):
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.WRITE_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
         if inp and outp:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
