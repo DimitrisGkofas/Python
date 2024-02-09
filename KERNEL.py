@@ -3,9 +3,15 @@ import numpy as np
 import re
 
 class table_class:
-    def __init__(self, context, table_shape, table_dtype):
+    def __init__(self, context, table_shape, table_dtype, inp = True, outp = True):
         self.np_array = np.zeros(shape=(table_shape), dtype = table_dtype)
-        self.cl_buffer = cl.Buffer(context, cl.mem_flags.WRITE_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array) # generaly a buffer can be w or r or rw but for simpl. it is only rw!
+        self.cl_buffer = None
+        if inp:
+            self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
+        elif outp:
+            self.cl_buffer = cl.Buffer(context, cl.mem_flags.WRITE_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
+        else:
+            self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
 
     def cpu_to_gpu(self, queue):
         cl.enqueue_copy(queue, self.cl_buffer, self.np_array).wait()
