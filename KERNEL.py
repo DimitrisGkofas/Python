@@ -6,11 +6,13 @@ class table_class:
     def __init__(self, context, table_shape, table_dtype, inp = True, outp = True):
         self.np_array = np.zeros(shape=(table_shape), dtype = table_dtype)
         self.cl_buffer = None
-        if inp and (not outp):
+        if (not inp) and (not outp):
+            self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
+        elif inp and (not outp):
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
-        if outp and (not inp):
+        elif (not inp) and outp:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.WRITE_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
-        if inp and outp:
+        else:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
 
     def cpu_to_gpu(self, queue):
