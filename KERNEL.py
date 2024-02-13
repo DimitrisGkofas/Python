@@ -34,8 +34,10 @@ def find_globals(kernel_str):
     return  ')'.join(kernel_args)
 
 class program_class:
-    def __init__(self, context, kernel_str, global_size, local_size = None):
-        kernel_str = "__kernel void func(" + find_globals(kernel_str)
+    def __init__(self, context, kernel_str, global_size, local_size = None, simple_kernel = True):
+        if simple_kernel:
+            kernel_str = "__kernel void func(" + find_globals(kernel_str)
+            print("This is a simple kernel with one functionality only!")
         self.program = cl.Program(context, kernel_str).build()
         self.global_size = global_size
         self.local_size = local_size
