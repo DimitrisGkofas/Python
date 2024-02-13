@@ -25,7 +25,7 @@ def find_globals(kernel_str):
     kernel_str = kernel_str[1:]
     kernel_args = kernel_str.split(')')
     args_list = kernel_args[0].split(',')
-    
+        
     for i in range(len(args_list)):
         if '*' in args_list[i]:
             args_list[i] = '__global ' + args_list[i].strip()
