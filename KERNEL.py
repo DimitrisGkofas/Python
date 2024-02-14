@@ -3,8 +3,12 @@ import numpy as np
 import re
 
 class table_class:
-    def __init__(self, context, table_shape, table_dtype, inp = True, outp = True):
-        self.np_array = np.zeros(shape=(table_shape), dtype = table_dtype)
+    def __init__(self, context, table_input = None, table_shape = None, table_dtype = None, inp = True, outp = True):
+        self.np_array = None
+        if table_input is None:
+            self.np_array = np.zeros(shape=(table_shape), dtype = table_dtype)
+        else:
+            self.np_array = table_input
         self.cl_buffer = None
         if (not inp) and (not outp):
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
@@ -37,7 +41,7 @@ class program_class:
     def __init__(self, context, kernel_str, global_size, local_size = None, simple_kernel = True):
         if simple_kernel:
             kernel_str = "__kernel void func(" + find_globals(kernel_str)
-            print("This is a simple kernel with one functionality only!")
+            print("This is a simple kernel with only one func()!")
         self.program = cl.Program(context, kernel_str).build()
         self.global_size = global_size
         self.local_size = local_size
@@ -60,8 +64,11 @@ class programs_ios_class:
         self.programs = {}
         self.ios = {}
 
-    def new_table(self, name, shape, dtype):
-        self.ios[name] = table_class(self.context, shape, dtype)
+    def new_table(self, name, table_input = None, shape = None, dtype = None):
+        if table_input is None:
+            self.ios[name] = table_class(self.context, shape = shape, dtype = dtype)
+        else:
+            self.ios[name] = table_class(self.context, table_input = table_input)
 
     def table(self, name):
         return self.ios[name].np_array.view()
