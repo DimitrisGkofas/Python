@@ -66,7 +66,7 @@ class programs_ios_class:
 
     def new_table(self, name, table_input = None, shape = None, dtype = None):
         if table_input is None:
-            self.ios[name] = table_class(self.context, shape = shape, dtype = dtype)
+            self.ios[name] = table_class(self.context, table_shape = shape, table_dtype = dtype)
         else:
             self.ios[name] = table_class(self.context, table_input = table_input)
 
