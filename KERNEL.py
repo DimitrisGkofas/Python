@@ -77,8 +77,11 @@ class programs_ios_class:
         self.ios[name].remove()
         del self.ios[name]
 
-    def new_program(self, name, kernel_str, global_size, local_size = None):
-        self.programs[name] = program_class(self.context, kernel_str, global_size, local_size)
+    def new_program(self, name, input_program = None, kernel_str = None, global_size = None, local_size = None):
+        if input_program is None:
+            self.programs[name] = program_class(self.context, kernel_str, global_size, local_size)
+        else:
+            self.programs[name] = input_program
 
     def del_program(self, name):
         self.programs[name].remove()
