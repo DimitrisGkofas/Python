@@ -1,12 +1,11 @@
 import pyopencl as cl
 import numpy as np
-import re
 
 class table_class:
     def __init__(self, context, table_input = None, table_shape = None, table_dtype = None, inp = True, outp = True):
         self.np_array = None
         if table_input is None:
-            self.np_array = np.zeros(shape=(table_shape), dtype = table_dtype)
+            self.np_array = np.zeros(shape=table_shape, dtype = table_dtype)
         else:
             self.np_array = table_input
         self.cl_buffer = None
@@ -73,19 +72,8 @@ class programs_ios_class:
     def table(self, name):
         return self.ios[name].np_array.view()
 
-    def del_table(self, name):
-        self.ios[name].remove()
-        del self.ios[name]
-
-    def new_program(self, name, input_program = None, kernel_str = None, global_size = None, local_size = None):
-        if input_program is None:
-            self.programs[name] = program_class(self.context, kernel_str, global_size, local_size)
-        else:
-            self.programs[name] = input_program
-
-    def del_program(self, name):
-        self.programs[name].remove()
-        del self.programs[name]
+    def new_program(self, name, kernel_str, global_size, local_size = None):
+        self.programs[name] = program_class(self.context, kernel_str, global_size, local_size)
 
     def run_program(self, name, *args, inp = True, outp = True):
         selected_program = self.programs[name]
