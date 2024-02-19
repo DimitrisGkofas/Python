@@ -17,6 +17,8 @@ class table_class:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.WRITE_ONLY | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
         else:
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
+        self.inp = inp
+        self.outp = outp
 
     def cpu_to_gpu(self, queue):
         cl.enqueue_copy(queue, self.cl_buffer, self.np_array).wait()
@@ -86,9 +88,11 @@ class programs_ios_class:
         if inp:
             for io in ios_cleared:
                 if isinstance(io, table_class):
-                    io.cpu_to_gpu(self.queue)
+                    if io.inp:
+                        io.cpu_to_gpu(self.queue)
         selected_program.run_program(self.queue, *ios_cleared)
         if outp:
             for io in ios_cleared:
                 if isinstance(io, table_class):
-                    io.gpu_to_cpu(self.queue)
+                    if io.outp:
+                        io.gpu_to_cpu(self.queue)
