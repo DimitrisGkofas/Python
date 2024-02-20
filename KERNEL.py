@@ -73,6 +73,12 @@ class programs_ios_class:
 
     def table(self, name):
         return self.ios[name].np_array.view()
+    
+    def del_table(self, name):
+        if name in self.ios:
+            del self.ios[name]
+        else:
+            print(f"Table '{name}' not found in the dictionary!")
 
     def new_program(self, name, kernel_str, global_size, local_size = None):
         self.programs[name] = program_class(self.context, kernel_str, global_size, local_size)
