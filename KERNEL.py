@@ -80,6 +80,9 @@ class programs_ios_class:
         else:
             print(f"Table '{name}' not found in the dictionary!")
 
+    def del_all_tables(self):
+        self.ios = {}
+
     def new_program(self, name, kernel_str, global_size, local_size = None):
         self.programs[name] = program_class(self.context, kernel_str, global_size, local_size)
 
