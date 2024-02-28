@@ -2,12 +2,8 @@ import pyopencl as cl
 import numpy as np
 
 class table_class:
-    def __init__(self, context, table_input = None, table_shape = None, table_dtype = None, inp = True, outp = True):
-        self.np_array = None
-        if table_input is None:
-            self.np_array = np.zeros(shape=table_shape, dtype = table_dtype)
-        else:
-            self.np_array = table_input
+    def __init__(self, context, table_input = None, table_shape = None, inp = True, outp = True):
+        self.np_array = table_input
         self.cl_buffer = None
         if (not inp) and (not outp):
             self.cl_buffer = cl.Buffer(context, cl.mem_flags.READ_WRITE | cl.mem_flags.COPY_HOST_PTR, hostbuf=self.np_array)
