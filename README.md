@@ -1,7 +1,7 @@
 The following is a simple api with name KERNEL on top of pyopencl api to make you come closer to gpu programming!
 It is free to change it and use it as you wish!
 Bellow the main obj with name: programs_ios_class is discribed, as it is the main component of KERNEL.py file for you to use:
-First make an instance of this class to hold all of your tables and programms.
+First make an instance of this class to hold all of your tables and programms just like you do in numpy!
 Second choose in your program objects how many compute units you need to have.
 Compute units are the objects tha run your program in the gpu. Each compute unit runs a portion of your program.
 Down below is a simple program func to run in your gpu. This is the format to run any program in the gpu based on the opencl api architecture!
@@ -32,4 +32,5 @@ Generally the maximum total number of compute units for this library is 16777216
 So you can use any table as long as it is 3d and lower in iorder or consists of less than 16777216 cells for the function get_global_id.
 General  approach for heier dimention tables and with larger size, is to change your thinking about tables all together.
 For example you can compute a huge table with size: 16777216 * 1024 if you just put a loop in your programm for every cu to compute not one but 1024 cells!
-So the limitations of this is in your mind! Have fun and if you want drag farther this simple lib!
+So the limitations of this is in your mind!
+Have fun and if you want drag farther this simple lib!
